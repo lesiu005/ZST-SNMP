@@ -5,9 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleSNMP.AdditionalWindows"
         mc:Ignorable="d"
-        Title="TableView" Height="350.746" Width="702.985" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow">
+        Title="TableView" Height="250" Width="300" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow">
     <Grid>
-        <DataGrid x:Name="dataTable" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="306" Width="675"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="348*"/>
+            <ColumnDefinition Width="347*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200*"/>
+            <RowDefinition Height="200*"/>
+        </Grid.RowDefinitions>
+        <DataGrid x:Name="dataTable" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="205" Width="272" ClipToBounds="True" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
 
     </Grid>
 </Window>

@@ -7,13 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="524" Width="727" Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
     <Grid>
-        <Label x:Name="label" Content="Adres" HorizontalAlignment="Left" Margin="248,10,0,0" VerticalAlignment="Top" Height="32" Width="54" FontSize="16"/>
-        <TextBox x:Name="addressBox" HorizontalAlignment="Left" Height="23" Margin="307,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label" Content="Adres" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="32" Width="54" FontSize="16"/>
+        <TextBox x:Name="addressBox" HorizontalAlignment="Left" Height="23" Margin="64,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="button" Content="Pobierz " HorizontalAlignment="Left" Margin="447,15,0,0" VerticalAlignment="Top" Width="75" FontSize="16" Click="button_Click"/>
         <ListBox x:Name="consoleBox" HorizontalAlignment="Left" Height="240" Margin="10,47,0,0" VerticalAlignment="Top" Width="699"/>
         <Button x:Name="button1" Content="Wyczyść konsolę" HorizontalAlignment="Left" Margin="553,15,0,0" VerticalAlignment="Top" Width="135" FontSize="16" Click="button1_Click"/>
-        <Button x:Name="button2" Content="Button" HorizontalAlignment="Left" Margin="468,316,0,0" VerticalAlignment="Top" Width="76" Click="button2_Click"/>
-        <TextBox x:Name="tableAddressBox" HorizontalAlignment="Left" Height="23" Margin="568,316,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Canvas HorizontalAlignment="Left" Height="72" Margin="10,316,0,0" VerticalAlignment="Top" Width="202" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
+            <TextBox x:Name="tableAddressBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Canvas.Left="36" Canvas.Top="10"/>
+            <Button x:Name="button2" Content="Pokaż tabele " HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Click="button2_Click" FontSize="16" Canvas.Left="36" Canvas.Top="38"/>
+        </Canvas>
+        <ComboBox x:Name="actionBox" HorizontalAlignment="Left" Margin="201,19,0,0" VerticalAlignment="Top" Width="141" FontSize="16" Height="23"/>
 
     </Grid>
 </Window>

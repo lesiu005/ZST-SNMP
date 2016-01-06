@@ -24,12 +24,98 @@ namespace SimpleSNMP
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string[] commands =
+        {
+            "GET",
+            "GET-NEXT",
+            "GET-BULK",
+            "WALK"
+        };
+
         public MainWindow()
         {
             InitializeComponent();
+            actionBox.ItemsSource = commands.ToList();
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
+        {
+            string command = actionBox.SelectedItem.ToString();
+
+            switch (command)
+            {
+               
+                case "GET":
+                    SNMP_GET();
+                    break;
+                case "GET-NEXT":
+                    SNMP_GET_NEXT();
+                    break;
+                case "GET-BULK":
+                    SNMP_GET_BULK();
+                    break;
+                case "WALK":
+                    SNMP_WALK();
+                    break;
+            }
+            
+        }
+
+        #region SNMP_Commands
+        private void SNMP_GET()
+        {
+            string adres = addressBox.Text;
+            var result = Messenger.Get(VersionCode.V1,
+                           new IPEndPoint(IPAddress.Parse("127.0.0.1"), 161),
+                           new OctetString("public"),
+                           new List<Variable> { new Variable(new ObjectIdentifier(adres)) },
+                           60000);
+            foreach (var v in result)
+            {
+                consoleBox.Items.Add(v.ToString());
+            }
+        }
+        private void SNMP_GET_NEXT()
+        {
+            string adres = addressBox.Text;
+            GetNextRequestMessage message = new GetNextRequestMessage(0,
+                              VersionCode.V1,
+                              new OctetString("public"),
+                              new List<Variable> { new Variable(new ObjectIdentifier(adres)) });
+            ISnmpMessage response = message.GetResponse(60000, new IPEndPoint(IPAddress.Parse("127.0.0.1"), 161));
+            if (response.Pdu().ErrorStatus.ToInt32() != 0)
+            {
+                throw new Exception();
+            }
+
+            var result = response.Pdu().Variables;
+            foreach (var v in result)
+            {
+                consoleBox.Items.Add(v.ToString());
+            }
+        }
+        private void SNMP_GET_BULK()
+        {
+            string adres = addressBox.Text;
+            GetBulkRequestMessage message = new GetBulkRequestMessage(0,
+                      VersionCode.V2,
+                      new OctetString("public"),
+                      0,
+                      10,
+                      new List<Variable> { new Variable(new ObjectIdentifier(adres)) });
+            ISnmpMessage response = message.GetResponse(60000, new IPEndPoint(IPAddress.Parse("127.0.0.1"), 161));
+            if (response.Pdu().ErrorStatus.ToInt32() != 0)
+            {
+                throw new Exception();
+            }
+
+            var result = response.Pdu().Variables;
+            foreach (var v in result)
+            {
+                consoleBox.Items.Add(v.ToString());
+            }
+        }
+        private void SNMP_WALK()
         {
             string adres = addressBox.Text;
             var result = new List<Variable>();
@@ -40,12 +126,12 @@ namespace SimpleSNMP
                            result,
                            30000,
                            WalkMode.WithinSubtree);
-            
-            foreach(var v in result)
+            foreach (var v in result)
             {
                 consoleBox.Items.Add(v.ToString());
             }
         }
+        #endregion
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {

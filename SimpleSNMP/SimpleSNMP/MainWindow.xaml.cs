@@ -1,5 +1,6 @@
 ﻿using Lextm.SharpSnmpLib;
 using Lextm.SharpSnmpLib.Messaging;
+using SimpleSNMP.AdditionalWindows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +63,9 @@ namespace SimpleSNMP
                 60000,
                 1,
                 null);
-            int a = 1;
+
+            TableView tView = new TableView(result);
+            tView.ShowDialog();
 
         }
     }

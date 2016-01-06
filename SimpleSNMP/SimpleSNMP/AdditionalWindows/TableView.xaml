@@ -1,0 +1,13 @@
+﻿<Window x:Class="SimpleSNMP.AdditionalWindows.TableView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimpleSNMP.AdditionalWindows"
+        mc:Ignorable="d"
+        Title="TableView" Height="350.746" Width="702.985" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow">
+    <Grid>
+        <DataGrid x:Name="dataTable" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="306" Width="675"/>
+
+    </Grid>
+</Window>

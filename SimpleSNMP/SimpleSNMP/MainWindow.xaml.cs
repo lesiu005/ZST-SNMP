@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -167,9 +168,73 @@ namespace SimpleSNMP
         private void setButton_Click(object sender, RoutedEventArgs e)
         {
             string adres = setAdresBox.Text;
-            string values = setValueBox.Text;
+            string value = setValueBox.Text;
 
             SNMP_SET(value, adres);
+        }
+
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            Thread th = new Thread(monit);
+            th.Start();
+        }
+        private void monit()
+        {
+            string adres="";
+            string time="";
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+            adres = monitorAdresBox.Text;
+                time = timeBox.Text;
+            }));
+          
+
+            var res1 = Messenger.Get(VersionCode.V1,
+                           new IPEndPoint(IPAddress.Parse("127.0.0.1"), 161),
+                           new OctetString("public"),
+                           new List<Variable> { new Variable(new ObjectIdentifier(adres)) },
+                           60000);
+
+            System.Threading.Thread.Sleep(int.Parse(time));
+
+            var res2 = Messenger.Get(VersionCode.V1,
+                           new IPEndPoint(IPAddress.Parse("127.0.0.1"), 161),
+                           new OctetString("public"),
+                           new List<Variable> { new Variable(new ObjectIdentifier(adres)) },
+                           60000);
+
+            int result1 = prepareResult(res1[0].ToString());
+            int result2 = prepareResult(res2[0].ToString());
+
+            if (result1 == result2)
+            {
+                this.Dispatcher.Invoke((Action)(() =>
+                {
+                    consoleBox.Items.Add(string.Format("Wartość nie uległa zmianie, wynosi {0}", result2));
+                }));
+
+            }
+            else if (result1 > result2)
+            {
+                this.Dispatcher.Invoke((Action)(() =>
+                {
+                    consoleBox.Items.Add(string.Format("Wartość zmniejszyła się. Wynosiła {0}, a teraz wynosi {1}.", result1, result2));
+                }));
+            }
+            else
+            {
+                this.Dispatcher.Invoke((Action)(() =>
+                {
+                    consoleBox.Items.Add(string.Format("Wartość zwiększyła się. Wynosiła {0}, a teraz wynosi {1}.", result1, result2));
+                }));
+            }
+        }
+        private int prepareResult(String result)
+        {
+            string tmp = result.Split(';')[1];
+            string tmp2 = tmp.Split(':')[1];
+
+            return int.Parse(tmp2);
         }
     }
 }

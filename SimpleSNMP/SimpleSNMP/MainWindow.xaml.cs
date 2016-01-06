@@ -131,8 +131,17 @@ namespace SimpleSNMP
                 consoleBox.Items.Add(v.ToString());
             }
         }
+        private void SNMP_SET(string value,string adres)
+        {
+            
+            var result = Messenger.Set(VersionCode.V1,
+                           new IPEndPoint(IPAddress.Parse("127.0.0.1"), 161),
+                           new OctetString("public"),
+                           new List<Variable> { new Variable(new ObjectIdentifier(adres), new OctetString(value)) },
+                           60000);
+        }
         #endregion
-
+        
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             consoleBox.Items.Clear();
@@ -153,6 +162,14 @@ namespace SimpleSNMP
             TableView tView = new TableView(result);
             tView.ShowDialog();
 
+        }
+
+        private void setButton_Click(object sender, RoutedEventArgs e)
+        {
+            string adres = setAdresBox.Text;
+            string values = setValueBox.Text;
+
+            SNMP_SET(value, adres);
         }
     }
 }

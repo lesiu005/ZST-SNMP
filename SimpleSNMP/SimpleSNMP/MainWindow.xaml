@@ -17,6 +17,14 @@
             <Button x:Name="button2" Content="Pokaż tabele " HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Click="button2_Click" FontSize="16" Canvas.Left="36" Canvas.Top="38"/>
         </Canvas>
         <ComboBox x:Name="actionBox" HorizontalAlignment="Left" Margin="201,19,0,0" VerticalAlignment="Top" Width="141" FontSize="16" Height="23"/>
+        <Canvas HorizontalAlignment="Left" Height="132" Margin="464,316,0,0" VerticalAlignment="Top" Width="245" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
+            <Label x:Name="label1" Content="SET BEJBE" Canvas.Left="90" Canvas.Top="10" Width="92" FontSize="16" Foreground="#FFFBF7F7"/>
+            <Label x:Name="label2" Content="Adres" Canvas.Left="10" Canvas.Top="39" Foreground="#FFF9F3F3" FontSize="16"/>
+            <Label x:Name="label3" Content="Wartość" Canvas.Left="10" Canvas.Top="70" FontSize="16" Foreground="#FFFDF9F9"/>
+            <TextBox x:Name="setAdresBox" Height="23" Canvas.Left="90" TextWrapping="Wrap" Canvas.Top="45" Width="120"/>
+            <TextBox x:Name="setValueBox" Height="23" Canvas.Left="90" TextWrapping="Wrap" Canvas.Top="76" Width="120"/>
+            <Button x:Name="setButton" Content="SET!" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="107" Canvas.Top="104" Click="setButton_Click"/>
+        </Canvas>
 
     </Grid>
 </Window>

@@ -1,0 +1,12 @@
+﻿<Window x:Class="SNMP_NMS_STATION.AdditionalWindows.TableView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SNMP_NMS_STATION.AdditionalWindows"
+        mc:Ignorable="d" Height="300" Width="457.426" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <DataGrid x:Name="dataTable" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="250" Width="429" BorderThickness="5"/>
+
+    </Grid>
+</Window>

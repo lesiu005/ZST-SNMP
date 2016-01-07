@@ -1,0 +1,20 @@
+﻿<Window x:Class="SNMP_NMS_STATION.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SNMP_NMS_STATION"
+        mc:Ignorable="d" Height="440.547" Width="664.303" WindowStartupLocation="CenterScreen" Background="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Closing="Window_Closing">
+    <Grid>
+        <ListBox x:Name="console" HorizontalAlignment="Left" Height="267" Margin="10,10,0,0" VerticalAlignment="Top" Width="636" BorderThickness="5"/>
+        <ComboBox x:Name="commandBox" HorizontalAlignment="Left" Margin="10,322,0,0" VerticalAlignment="Top" Width="207" SelectionChanged="commandBox_SelectionChanged"/>
+        <Label x:Name="label" Content="Komenda" HorizontalAlignment="Left" Margin="74,291,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <Label x:Name="label1" Content="Wybór czegoś" HorizontalAlignment="Left" Margin="276,291,0,0" VerticalAlignment="Top" FontSize="16" Width="120"/>
+        <ComboBox x:Name="selectBox" HorizontalAlignment="Left" Margin="250,322,0,0" VerticalAlignment="Top" Width="170"/>
+        <Button x:Name="button1" Content="Wykonaj" HorizontalAlignment="Left" Margin="453,317,0,0" VerticalAlignment="Top" Width="75" FontSize="16" Click="button1_Click"/>
+        <Button x:Name="button" Content="Czyść konsole" Click="button_Click" Margin="512,367,10,10" FontSize="16"/>
+        <TextBox x:Name="valueBox" HorizontalAlignment="Left" Height="23" Margin="203,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170"/>
+        <Label x:Name="label2" Content="Wartość" HorizontalAlignment="Left" Margin="250,344,0,0" VerticalAlignment="Top" Width="75" FontSize="16"/>
+
+    </Grid>
+</Window>

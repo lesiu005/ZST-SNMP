@@ -43,6 +43,9 @@
       <HintPath>..\packages\Lextm.SharpSnmpLib.8.5.0.0\lib\net40\SharpSnmpLib.Portable.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SnmpSharpNet">
+      <HintPath>..\..\..\..\SnmpSharpNet-bin-0-9-4\Release\SnmpSharpNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />

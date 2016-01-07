@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace SimpleSNMP
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Socket socket;
         private string[] commands =
         {
             "GET",
@@ -141,6 +143,158 @@ namespace SimpleSNMP
                            new List<Variable> { new Variable(new ObjectIdentifier(adres), new OctetString(value)) },
                            60000);
         }
+        private void SNMP_RECEIVE()
+        {
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 162);
+            EndPoint ep = (EndPoint)ipep;
+
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                button4.IsEnabled = false;
+            }));
+
+            socket.Bind(ep);
+            // Disable timeout processing. Just block until packet is received 
+            socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 0);
+            bool run = true;
+            int inlen = -1;
+            while (run)
+            {
+                byte[] indata = new byte[16 * 1024];
+                // 16KB receive buffer int inlen = 0;
+                IPEndPoint peer = new IPEndPoint(IPAddress.Any, 0);
+                EndPoint inep = (EndPoint)peer;
+                try
+                {
+
+                    inlen = socket.ReceiveFrom(indata, ref inep);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception {0}", ex.Message);
+                    inlen = -1;
+                }
+                if (inlen > 0)
+                {
+                    // Check protocol version int 
+                    int ver = SnmpSharpNet.SnmpPacket.GetProtocolVersion(indata, inlen);
+                    if (ver == (int)SnmpSharpNet.SnmpVersion.Ver1)
+                    {
+                        // Parse SNMP Version 1 TRAP packet 
+
+                        SnmpSharpNet.SnmpV1TrapPacket pkt = new SnmpSharpNet.SnmpV1TrapPacket();
+                        pkt.decode(indata, inlen);
+
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            
+                      
+                        consoleBox.Items.Add(string.Format("** SNMP Version 1 TRAP received from {0}:", inep.ToString()));
+                        consoleBox.Items.Add(string.Format("*** Trap generic: {0}", translateReceiver(pkt.Pdu.Generic)));
+                        consoleBox.Items.Add(string.Format("*** Trap specific: {0}", pkt.Pdu.Specific));
+                        consoleBox.Items.Add(string.Format("*** Agent address: {0}", pkt.Pdu.AgentAddress.ToString()));
+                        consoleBox.Items.Add(string.Format("*** Timestamp: {0}", pkt.Pdu.TimeStamp.ToString()));
+                        consoleBox.Items.Add(string.Format("*** VarBind count: {0}", pkt.Pdu.VbList.Count));
+                        consoleBox.Items.Add(string.Format("*** VarBind content:"));
+                        }));
+
+                        foreach (SnmpSharpNet.Vb v in pkt.Pdu.VbList)
+                        {
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                consoleBox.Items.Add(string.Format("**** {0} {1}: {2}", v.Oid.ToString(), SnmpSharpNet.SnmpConstants.GetTypeName(v.Value.Type), v.Value.ToString()));
+                            }));
+                        }
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            consoleBox.Items.Add("** End of SNMP Version 1 TRAP data.");
+                        }));
+                    }
+                    else
+                    {
+                        // Parse SNMP Version 2 TRAP packet 
+                        SnmpSharpNet.SnmpV2Packet pkt = new SnmpSharpNet.SnmpV2Packet();
+                        pkt.decode(indata, inlen);
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            consoleBox.Items.Add(string.Format("** SNMP Version 2 TRAP received from {0}:", inep.ToString()));
+                        }));
+                        if ((SnmpSharpNet.PduType)pkt.Pdu.Type != SnmpSharpNet.PduType.V2Trap)
+                        {
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                consoleBox.Items.Add("*** NOT an SNMPv2 trap ****");
+                            }));
+                        }
+                        else
+                        {
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                consoleBox.Items.Add(string.Format("*** Community: {0}", pkt.Community.ToString()));
+                            consoleBox.Items.Add(string.Format("*** VarBind count: {0}", pkt.Pdu.VbList.Count));
+                            consoleBox.Items.Add("*** VarBind content:");
+                            }));
+                            foreach (SnmpSharpNet.Vb v in pkt.Pdu.VbList)
+                            {
+                                this.Dispatcher.Invoke((Action)(() =>
+                                {
+                                    consoleBox.Items.Add(string.Format("**** {0} {1}: {2}",
+                                   v.Oid.ToString(), SnmpSharpNet.SnmpConstants.GetTypeName(v.Value.Type), v.Value.ToString()));
+                                }));
+                            }
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                consoleBox.Items.Add("** End of SNMP Version 2 TRAP data.");
+                            }));
+                        }
+                    }
+                }
+                else
+                {
+                    if (inlen == 0)
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            consoleBox.Items.Add("Zero length packet received.");
+                        }));
+                }
+            }
+           
+        }
+        private void killSocket()
+        {
+            try
+            {
+                socket.Close();
+            }catch(Exception e)
+            {
+
+            }
+        }
+        private string translateReceiver(int output)
+        {
+            string result = "";
+
+            switch (output)
+            {
+                case 0:
+                    return "ColdStart";
+                case 1:
+                    return "WarmStart";
+                case 2:
+                    return "LinkDown";
+                case 3:
+                    return "LinkUp";
+                case 4:
+                    return "AuthenticationFailure";
+                case 5:
+                    return "EGPNeighbourLoss";
+                case 6:
+                    return "Other (Enterprise specific)";
+                default:
+                    return result;
+            }
+        }
         #endregion
         
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -235,6 +389,17 @@ namespace SimpleSNMP
             string tmp2 = tmp.Split(':')[1];
 
             return int.Parse(tmp2);
+        }
+
+        private void button4_Click(object sender, RoutedEventArgs e)
+        {
+            Thread th = new Thread(SNMP_RECEIVE);
+            th.Start();
+        }
+
+        private void killerButton_Click(object sender, RoutedEventArgs e)
+        {
+            killSocket();
         }
     }
 }

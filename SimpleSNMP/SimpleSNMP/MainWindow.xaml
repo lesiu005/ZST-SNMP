@@ -34,6 +34,8 @@
             <Label x:Name="label2_Copy2" Content="Czas [ms]" Canvas.Left="10" Canvas.Top="87" Foreground="#FFF9F3F3" FontSize="16"/>
             <Button x:Name="button3" Content="Monit" Canvas.Left="76" Canvas.Top="136" Width="75" Click="button3_Click"/>
         </Canvas>
+        <Button x:Name="button4" Content="Włącz nasłuch" HorizontalAlignment="Left" Margin="10,457,0,0" VerticalAlignment="Top" Width="129" FontSize="16" Click="button4_Click"/>
+        <Button x:Name="killerButton" Content="Kill" HorizontalAlignment="Left" Margin="158,457,0,0" VerticalAlignment="Top" Width="75" Click="killerButton_Click"/>
 
     </Grid>
 </Window>

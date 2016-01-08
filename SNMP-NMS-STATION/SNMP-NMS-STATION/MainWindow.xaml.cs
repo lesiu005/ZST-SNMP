@@ -144,7 +144,7 @@ namespace SNMP_NMS_STATION
                 case 1:
                     obiekt = selectBox.SelectedItem.ToString();
                     adres = scalars[obiekt];
-                    add(handler.SNMP_GET(adres));
+                    add(obiekt+": "+handler.SNMP_GET(adres));
                     break;
                 case 2:
                     Thread th = new Thread(SNMP_RECEIVE);
@@ -160,13 +160,14 @@ namespace SNMP_NMS_STATION
                 case 4:
                     obiekt = selectBox.SelectedItem.ToString();
                     adres = scalars[obiekt];
+                    string value = valueBox.Text;
+                    add(obiekt+": "+handler.SNMP_SET(adres, value));
                     break;
                 default:
                     break;
 
             }
         }
-        private void SNMP_GET_TABLE() { }
         private int prepareResult(String result)
         {
             string tmp = result.Split(';')[1];

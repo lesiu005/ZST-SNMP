@@ -1,4 +1,4 @@
-﻿using Lextm.SharpSnmpLib;
+using Lextm.SharpSnmpLib;
 using Lextm.SharpSnmpLib.Messaging;
 using SnmpSharpNet;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SNMP_NMS_STATION
 {
-    class SNMPCommandHandler
+    public class SNMPCommandHandler
     {
         public Variable[,] SNMP_GET_TABLE(string address)
         {

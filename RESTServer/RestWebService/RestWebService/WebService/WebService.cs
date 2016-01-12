@@ -10,12 +10,14 @@ namespace RestWebService
 {
     public class WebService : IHttpHandler
     {
-        private String ConnString;
         private AccessLayer AccessLayer;
 
+        /// <summary>
+        /// Gets a value indicating whether another request can use the <see cref="T:System.Web.IHttpHandler" /> instance.
+        /// </summary>
         public bool IsReusable
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
 
         /// <summary>
@@ -26,7 +28,8 @@ namespace RestWebService
         {
             try
             {
-                /*String url = Convert.ToString(context.Request.Url);  
+                String url = Convert.ToString(context.Request.Url);
+                this.AccessLayer = new AccessLayer();
 
                 switch (context.Request.HttpMethod)
                 {
@@ -44,7 +47,7 @@ namespace RestWebService
                         break;
                     default:
                         break;
-                }*/
+                }
             }
             catch (Exception e)
             {
@@ -65,25 +68,32 @@ namespace RestWebService
         /// <exception cref="System.NotImplementedException"></exception>
         private void Read(HttpContext context)
         {
-            /*int employeeCode = Convert.ToInt16(context.Request["id"]);
-
-            context.Response.ContentType = "text/xml";
-            WriteResponse("TESTING");*/
+            if (context.Request.QueryString["uid"] != null)
+            {
+                String response = this.AccessLayer.Get(context.Request["uid"].ToString());
+                //String response = context.Request.QueryString["uid"];
+                context.Response.ContentType = "text/json";
+                WriteResponse(response);
+            }
+            else
+            {
+                WriteResponse("error");
+            }
         }
 
         private void Delete(HttpContext context)
         {
-            throw new NotImplementedException();
+            WriteResponse("TESTING-delete");
         }
 
         private void Update(HttpContext context)
         {
-            throw new NotImplementedException();
+            WriteResponse("TESTING-update");
         }
 
         private void Create(HttpContext context)
         {
-            throw new NotImplementedException();
+            WriteResponse("TESTING-create");
         }
     }
 }

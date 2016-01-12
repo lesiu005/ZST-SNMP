@@ -1,0 +1,17 @@
+IIS HowTO
+
+Start IIS on Windows
+1. Click Start and then click Control Panel.
+2. In Control Panel, click Programs and then click Turn Windows features on or off.
+3. In the Windows Features dialog box, click Internet Information Services and then click OK.
+
+Jeżeli wali błędem pomocny może być artykuł
+https://support.microsoft.com/en-us/kb/2734782
+
+Ścieżka do folderu gdzie IIS trzyma nasze strony
+%SystemDrive%\inetpub\wwwroot
+
+Dodajemy do Handler Map Sscript Map
+UID
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
+
